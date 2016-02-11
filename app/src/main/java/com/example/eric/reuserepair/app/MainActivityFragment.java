@@ -40,48 +40,14 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Hard-coded dummy data for item category list
-        String[] data = {
-                "APPLIANCES, LARGE",
-                "APPLIANCE, SMALL",
-                "ART SUPPLIES",
-                "BEDDING / BATH",
-                "BIKES / SPORTING CAMPING",
-                "BOOKS",
-                "BROWN PAPER / LARGE SHOPPING BAGS",
-                "BLDG MATERIALS / HOME IMPROVEMENT",
-                "CDs, DVDs, LPs, VIDEO GAMES, etc",
-                "CELL PHONES",
-                "CHILDREN'S GOODS / CLOTHING",
-                "CLOTHING / ACCESSORIES",
-                "COMPUTER PAPER",
-                "COMPUTERS / MONITORS",
-                "EGG CARTONS",
-                "EYEGLASSES",
-                "FABRIC (material, batting, supplies)",
-                "FIREWOOD",
-                "FOOD (unopened, pre-expired)",
-                "FOOD (surplus garden produce)",
-                "FOOD CONTAINERS (clean glass/plastic w/lids)",
-                "FURNITURE",
-                "GARDEN / LANDSCAPING",
-                "GARDEN POTS",
-                "HOME ELECTRONICS",
-                "HOUSEHOLD GOODS",
-                "MEDICAL EQUIPMENT / SUPPLIES",
-                "OFFICE EQUIPMENT",
-                "OFFICE SUPPLIES",
-                "PACKING MATERIALS",
-                "PET SUPPIES / FOOD",
-                "PRINTER CARTRDGE REFILLING",
-                "SCHOOL SUPPLIES",
-                "TOILETRIES",
-                "VEHICLE / PARTS",
-                "MEDICATIONS"
-        };
+        FetchCategoryTask categoryTask = new FetchCategoryTask();
+        categoryTask.execute();
+
+        // Blank string which will be appended after GET request
+        String[] data = {};
         List<String> category = new ArrayList<String>(Arrays.asList(data));
 
-        // Create an ArrayAdapter for the dummy category list to populate ListView
+        // Create an ArrayAdapter for the blank category list to populate ListView
         mCategoryAdapter =
                 new ArrayAdapter<String>(
                         getActivity(),
@@ -102,9 +68,6 @@ public class MainActivityFragment extends Fragment {
                 Toast.makeText(getActivity(), category, Toast.LENGTH_SHORT).show();
             }
         });
-
-        FetchCategoryTask categoryTask = new FetchCategoryTask();
-        categoryTask.execute();
 
         return rootView;
     }
@@ -198,6 +161,7 @@ public class MainActivityFragment extends Fragment {
         protected void onPostExecute(String[] result) {
             if (result != null) {
                 mCategoryAdapter.clear();
+                Arrays.sort(result);
                 for (String categoryStr : result) {
                     mCategoryAdapter.add(categoryStr);
                 }
