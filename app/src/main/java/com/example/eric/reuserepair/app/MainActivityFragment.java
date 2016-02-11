@@ -1,5 +1,6 @@
 package com.example.eric.reuserepair.app;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -62,10 +63,13 @@ public class MainActivityFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.listview_category);
         listView.setAdapter(mCategoryAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String category = mCategoryAdapter.getItem(position);
-                Toast.makeText(getActivity(), category, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), ItemActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, category);
+                startActivity(intent);
             }
         });
 
