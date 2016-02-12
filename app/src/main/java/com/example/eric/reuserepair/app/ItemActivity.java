@@ -12,7 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ItemActivity extends AppCompatActivity {
 
@@ -22,13 +28,23 @@ public class ItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_item);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ItemFragment())
+                    .add(R.id.item, new ItemFragment())
                     .commit();
         }
 
-        /*
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        /*
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +61,7 @@ public class ItemActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.item, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -69,6 +85,8 @@ public class ItemActivity extends AppCompatActivity {
      */
     public static class ItemFragment extends Fragment {
 
+        ArrayAdapter<String> mItemAdapter;
+
         public ItemFragment() {
         }
 
@@ -76,14 +94,29 @@ public class ItemActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
+            // Blank string which will be appended after GET request
+            String[] data = {
+                    "Harcoded item 1",
+                    "Harcoded item 2",
+                    "Harcoded item 3",
+                    "Harcoded item 4",
+                    "Harcoded item 5"
+            };
+            List<String> item = new ArrayList<String>(Arrays.asList(data));
+
+            // Create an ArrayAdapter for the blank category list to populate ListView
+            mItemAdapter =
+                    new ArrayAdapter<String>(
+                            getActivity(),
+                            R.layout.list_item_item,
+                            R.id.list_item_item_textview,
+                            data
+                    );
+
             View rootView = inflater.inflate(R.layout.fragment_item, container, false);
 
-            Intent intent = getActivity().getIntent();
-            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                String categoryStr = intent.getStringExtra(Intent.EXTRA_TEXT);
-                ((TextView) rootView.findViewById(R.id.item_text))
-                        .setText(categoryStr);
-            }
+            ListView listView = (ListView) rootView.findViewById(R.id.listview_item);
+            listView.setAdapter(mItemAdapter);
 
             return rootView;
         }
