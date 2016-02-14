@@ -56,7 +56,6 @@ public class MainActivityFragment extends Fragment {
                         R.id.list_item_category_textview,
                         category
                 );
-
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView and attach this adapter to it
