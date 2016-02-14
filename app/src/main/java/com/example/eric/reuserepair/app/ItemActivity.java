@@ -112,7 +112,6 @@ public class ItemActivity extends AppCompatActivity {
                             R.id.list_item_item_textview,
                             data
                     );
-
             View rootView = inflater.inflate(R.layout.fragment_item, container, false);
 
             ListView listView = (ListView) rootView.findViewById(R.id.listview_item);
