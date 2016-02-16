@@ -30,11 +30,11 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class ItemView extends Fragment {
 
     ArrayAdapter<String> mCategoryAdapter;
 
-    public MainActivityFragment() {
+    public ItemView() {
     }
 
     @Override
@@ -56,7 +56,7 @@ public class MainActivityFragment extends Fragment {
                         R.id.list_item_category_textview,
                         category
                 );
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_item, container, false);
 
         // Get a reference to the ListView and attach this adapter to it
         ListView listView = (ListView) rootView.findViewById(R.id.listview_category);
@@ -65,9 +65,12 @@ public class MainActivityFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String category = mCategoryAdapter.getItem(position);
+                /*String category = mCategoryAdapter.getItem(position);
                 Intent intent = new Intent(getActivity(), ItemActivity.class)
-                        .putExtra("category", category);
+                        .putExtra(Intent.EXTRA_TEXT, category);
+                startActivity(intent);*/
+                Intent intent = new Intent(getActivity(), ItemActivity.class);
+                intent.putExtra("selectedCat", mCategoryAdapter.getItem(position));
                 startActivity(intent);
             }
         });

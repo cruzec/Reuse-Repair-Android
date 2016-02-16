@@ -16,9 +16,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ItemActivity extends AppCompatActivity {
 
@@ -73,25 +79,98 @@ public class ItemActivity extends AppCompatActivity {
      * A placeholder fragment containing a simple view.
      */
     public static class ItemFragment extends Fragment {
-
         ArrayAdapter<String> mItemAdapter;
-
         public ItemFragment() {
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            String selectedCat = getActivity().getIntent().getExtras().getString("category");//test until we can figure out how to get selected category
+            String allItemsString = null;
+            String allCategoriesString = null;
+            String allItemCategoriesString = null;
+            JSONArray itemsArray = null;
+            JSONArray categoryArray = null;
+            JSONArray itemsCategoriesArray = null;
 
+            GetItem allItems = new GetItem();
+            GetCategory allCategories = new GetCategory();
+            GetItemCategory allItemCategories = new GetItemCategory();
+
+
+            String CID = null;
+            ArrayList<String> selectedItemNumbers = new ArrayList<String>();
+            ArrayList<String> data = new ArrayList<String>();
+            try {
+                allItemsString = allItems.execute().get();
+                JSONObject itemsJSONObj = new JSONObject(allItemsString);
+                itemsJSONObj = new JSONObject(itemsJSONObj.get("item").toString());
+                itemsArray = itemsJSONObj.getJSONArray("records");
+
+
+                allCategoriesString = allCategories.execute().get();
+                JSONObject categoriesJSONObj = new JSONObject(allCategoriesString);
+                categoriesJSONObj = new JSONObject(categoriesJSONObj.get("category").toString());
+                categoryArray = categoriesJSONObj.getJSONArray("records");
+
+                allItemCategoriesString = allItemCategories.execute().get();
+                JSONObject ItemsCategoriesJSONObj = new JSONObject(allItemCategoriesString);
+                ItemsCategoriesJSONObj = new JSONObject(ItemsCategoriesJSONObj.get("item-category").toString());
+                itemsCategoriesArray = ItemsCategoriesJSONObj.getJSONArray("records");
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            for(int i = 0; i < categoryArray.length(); i++){
+                try {
+                    JSONArray lookingForSelected = categoryArray.getJSONArray(i);
+                    String key = lookingForSelected.getString(1);
+                    if(key.equals(selectedCat)){
+                        CID = lookingForSelected.getString(0);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            for(int i = 0; i < itemsCategoriesArray.length(); i++){
+                try {
+                    JSONArray lookingForCID = itemsCategoriesArray.getJSONArray(i);
+                    String key = lookingForCID.getString(1);
+                    if(key.equals(CID)){
+                        selectedItemNumbers.add(lookingForCID.getString(0));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            for(int i = 0; i < itemsArray.length(); i++){
+                try {
+                    JSONArray lookingForIID = itemsArray.getJSONArray(i);
+                    String key = lookingForIID.getString(0);
+                    if(selectedItemNumbers.contains(key)){
+                        data.add(lookingForIID.getString(1));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
             // Blank string which will be appended after GET request
-            String[] data = {
+            /*String[] data = {
                     "Harcoded item 1",
                     "Harcoded item 2",
                     "Harcoded item 3",
                     "Harcoded item 4",
                     "Harcoded item 5"
-            };
-            List<String> item = new ArrayList<String>(Arrays.asList(data));
+            };*/
+            //List<String> item = new ArrayList<String>(Arrays.asList(data));
 
             // Create an ArrayAdapter for the blank category list to populate ListView
             mItemAdapter =
@@ -105,7 +184,15 @@ public class ItemActivity extends AppCompatActivity {
 
             ListView listView = (ListView) rootView.findViewById(R.id.listview_item);
             listView.setAdapter(mItemAdapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    String category = mItemAdapter.getItem(position);
+                    Intent intent = new Intent(getActivity(), BusinessActivity.class);
+                    startActivity(intent);
+                }
+            });
             return rootView;
         }
     }
