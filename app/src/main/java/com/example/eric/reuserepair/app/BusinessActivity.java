@@ -1,5 +1,6 @@
 package com.example.eric.reuserepair.app;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,15 +86,87 @@ public class BusinessActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            ArrayList<String> BIDHolder = new ArrayList<String>();
+            ArrayList<String> data = new ArrayList<String>();
+            String allBusinessString;
+            String allBusinessItemString;
+            JSONArray businessArray = null;
+            JSONArray itemBusinessArray = null;
+            GetBusiness allBusiness = new GetBusiness();
+            GetItemBusiness allItemBusiness = new GetItemBusiness();
 
-            // Blank string which will be appended after GET request
-            String[] data2 = {
-                    "Harcoded item 1",
-                    "Harcoded item 2",
-                    "Harcoded item 3",
-                    "Harcoded item 4",
-                    "Harcoded item 5"
-            };
+            try {
+                allBusinessString = allBusiness.execute().get();
+                JSONObject businessJSONObj = new JSONObject(allBusinessString);
+                businessJSONObj = new JSONObject(businessJSONObj.get("business").toString());
+                businessArray = businessJSONObj.getJSONArray("records");
+
+                allBusinessItemString = allItemBusiness.execute().get();
+                JSONObject itemBusinessJSONObj = new JSONObject(allBusinessItemString);
+                itemBusinessJSONObj = new JSONObject(itemBusinessJSONObj.get("item-business").toString());
+                itemBusinessArray = itemBusinessJSONObj.getJSONArray("records");
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            JSONArray itemsArray = null;
+            String selectedItem = getActivity().getIntent().getExtras().getString("selectedItem");
+            String selectedItemIID = null;
+            JSONObject itemsJSONObj = null;
+
+            try {
+                itemsJSONObj = new JSONObject(getActivity().getIntent().getExtras().getString("allItems"));
+                itemsJSONObj = new JSONObject(itemsJSONObj.get("item").toString());
+                itemsArray = itemsJSONObj.getJSONArray("records");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            for(int i = 0; i < itemsArray.length(); i++){
+                try {
+                    JSONArray lookingForIID = itemsArray.getJSONArray(i);
+                    String key = lookingForIID.getString(1);
+
+                    if(key.equals(selectedItem)){
+                        selectedItemIID = lookingForIID.getString(0);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            for(int i = 0; i < itemBusinessArray.length(); i++){
+                try {
+                    JSONArray lookingForBID = itemBusinessArray.getJSONArray(i);
+                    String key = lookingForBID.getString(0);
+                    if(key.equals(selectedItemIID)){
+                        //selectedItemIID = lookingForBID.getString(0);
+                        BIDHolder.add(lookingForBID.getString(1));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            for(int i = 0; i < businessArray.length(); i++){
+                try {
+                    JSONArray lookingForBName = businessArray.getJSONArray(i);
+                    String key = lookingForBName.getString(0);
+                    if(BIDHolder.contains(key)){
+                        data.add(lookingForBName.getString(1));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
             //List<String> item = new ArrayList<String>(Arrays.asList(data));
 
             // Create an ArrayAdapter for the blank category list to populate ListView
@@ -101,9 +175,9 @@ public class BusinessActivity extends AppCompatActivity {
                             getActivity(),
                             R.layout.list_item_business,
                             R.id.list_item_business_textview,
-                            data2
+                            data
                     );
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_business, container, false);
 
             ListView listView = (ListView) rootView.findViewById(R.id.listview_business);
             listView.setAdapter(mItemAdapter);

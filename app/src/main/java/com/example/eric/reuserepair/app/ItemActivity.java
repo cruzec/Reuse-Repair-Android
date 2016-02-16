@@ -184,12 +184,15 @@ public class ItemActivity extends AppCompatActivity {
 
             ListView listView = (ListView) rootView.findViewById(R.id.listview_item);
             listView.setAdapter(mItemAdapter);
+            final String finalAllItemsString = allItemsString;
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                    String category = mItemAdapter.getItem(position);
+                    String item = mItemAdapter.getItem(position);
                     Intent intent = new Intent(getActivity(), BusinessActivity.class);
+                    intent.putExtra("allItems", finalAllItemsString);
+                    intent.putExtra("selectedItem", item);
                     startActivity(intent);
                 }
             });
