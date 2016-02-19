@@ -9,10 +9,20 @@
     tools:context="com.example.eric.reuserepair.app.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/csc_logo"
+        android:id="@+id/imageView"
+        android:layout_above="@+id/main_button"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="83dp" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Locate Business"
+        android:text="Locate a Business"
         android:id="@+id/main_button"
         android:layout_gravity="center"
         android:layout_centerVertical="true"
@@ -35,14 +45,6 @@
         android:layout_gravity="center"
         android:layout_below="@+id/main_button"
         android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp" />
 
 
 </RelativeLayout>

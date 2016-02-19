@@ -1,6 +1,7 @@
 package com.example.eric.reuserepair.app;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -49,6 +50,28 @@ public class MainActivityFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        Button button2 = (Button) rootView.findViewById(R.id.link_button1);
+        button2.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Uri uri1 = Uri.parse("http://site.republicservices.com/site/corvallis-or/en/documents/corvallisrecycledepot.pdf");
+                Intent intent2 = new Intent(Intent.ACTION_VIEW, uri1);
+                startActivity(intent2);
+            }
+        });
+
+        Button button3 = (Button) rootView.findViewById(R.id.link_button2);
+        button3.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Uri uri2 = Uri.parse("http://site.republicservices.com/site/corvallis-or/en/documents/detailedrecyclingguide.pdf");
+                Intent intent3 = new Intent(Intent.ACTION_VIEW, uri2);
+                startActivity(intent3);
             }
         });
 
