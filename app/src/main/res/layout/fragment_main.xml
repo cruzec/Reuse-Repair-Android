@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,11 +9,42 @@
     tools:context="com.example.eric.reuserepair.app.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
-    <ListView
-        android:id="@+id/listview_category"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Locate Business"
+        android:id="@+id/main_button"
+        android:layout_gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
-</FrameLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Link 2"
+        android:id="@+id/link_button2"
+        android:layout_gravity="center"
+        android:layout_below="@+id/link_button1"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Link 1"
+        android:id="@+id/link_button1"
+        android:layout_gravity="center"
+        android:layout_below="@+id/main_button"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp" />
+
+
+</RelativeLayout>
 
 
