@@ -43,8 +43,9 @@ public class MainActivityFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        Button button = (Button) rootView.findViewById(R.id.main_button);
-        button.setOnClickListener(new View.OnClickListener() {
+        // Button for locating businesses
+        Button button1 = (Button) rootView.findViewById(R.id.main_button);
+        button1.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -53,6 +54,7 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
+        // Button for Republic recycle depot link
         Button button2 = (Button) rootView.findViewById(R.id.link_button1);
         button2.setOnClickListener(new View.OnClickListener() {
 
@@ -64,6 +66,7 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
+        // Button for Republic detailed recycling guide link
         Button button3 = (Button) rootView.findViewById(R.id.link_button2);
         button3.setOnClickListener(new View.OnClickListener() {
 
