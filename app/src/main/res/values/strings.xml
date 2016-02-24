@@ -4,4 +4,5 @@
     <string name="title_activity_item">Items</string>
     <string name="title_activity_business">Businesses</string>
     <string name="title_activity_category">Categories</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
