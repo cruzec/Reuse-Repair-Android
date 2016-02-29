@@ -3,7 +3,9 @@ package com.example.eric.reuserepair.app;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
@@ -16,6 +18,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -48,7 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
-        // Find coordinates of current location
+        // Check for location permission before finding user's last known coordinates
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -65,7 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double longitude = location.getLongitude();
 
         if (location != null) {
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            LatLng latLng = new LatLng(latitude, longitude);
             mMap.addMarker(new MarkerOptions().position(latLng).title("My Current Location"));
             // mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));

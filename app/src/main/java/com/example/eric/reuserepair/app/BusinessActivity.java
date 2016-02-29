@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -81,7 +82,7 @@ public class BusinessActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             ArrayList<String> BIDHolder = new ArrayList<String>();
             ArrayList<String> data = new ArrayList<String>();
-            String allBusinessString;
+            String allBusinessString = null;
             String allBusinessItemString;
             JSONArray businessArray = null;
             JSONArray itemBusinessArray = null;
@@ -174,6 +175,18 @@ public class BusinessActivity extends AppCompatActivity {
 
             ListView listView = (ListView) rootView.findViewById(R.id.listview_business);
             listView.setAdapter(mItemAdapter);
+            final String finalAllBusinessString = allBusinessString;
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    String item = mItemAdapter.getItem(position);
+                    Intent intent = new Intent(getActivity(), DetailActivity.class);
+                    intent.putExtra("allBusiness", finalAllBusinessString);
+                    intent.putExtra("business", item);
+                    startActivity(intent);
+                }
+            });
 
             return rootView;
         }
