@@ -36,6 +36,7 @@ public class BusinessActivity extends AppCompatActivity {
         setContentView(R.layout.activity_business);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(this.getIntent().getExtras().getString("selectedItem"));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

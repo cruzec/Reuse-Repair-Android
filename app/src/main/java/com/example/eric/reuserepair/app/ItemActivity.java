@@ -34,6 +34,7 @@ public class ItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_item);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(this.getIntent().getExtras().getString("category"));
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

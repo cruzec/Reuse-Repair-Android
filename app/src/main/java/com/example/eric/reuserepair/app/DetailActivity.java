@@ -33,6 +33,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(this.getIntent().getExtras().getString("business"));
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -102,7 +103,6 @@ public class DetailActivity extends AppCompatActivity {
                     lookingForBID = businessRecords.getJSONArray(i);
                     String businessName = lookingForBID.getString(1);
                     if (businessName.equals(selectedBusiness)) {
-
                         data.add(lookingForBID.getString(1));
                         data.add(lookingForBID.getString(2));
                         data.add(lookingForBID.getString(3));
