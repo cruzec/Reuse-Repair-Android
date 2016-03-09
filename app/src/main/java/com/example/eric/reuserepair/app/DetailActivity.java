@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -82,8 +83,14 @@ public class DetailActivity extends AppCompatActivity {
 
     public static class DetailFragment extends Fragment {
 
-        ImageView mImg;
-        ArrayAdapter<String> mDetailAdapter;
+        private ImageView mImg;
+        private TextView mAddress;
+        private TextView mWebsite;
+        private TextView mPhone;
+        private TextView mHours;
+        private TextView mRepair;
+        // ArrayAdapter<String> mDetailAdapter;
+
         private final String LOG_TAG = DetailFragment.class.getSimpleName();
 
         public DetailFragment() {
@@ -106,6 +113,13 @@ public class DetailActivity extends AppCompatActivity {
             JSONArray lookingForBID;
             double lat = 0;
             double lng = 0;
+
+            View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+            mAddress = (TextView) rootView.findViewById(R.id.address_view);
+            mPhone = (TextView) rootView.findViewById(R.id.phone_view);
+            mWebsite = (TextView) rootView.findViewById(R.id.site_view);
+            mHours = (TextView) rootView.findViewById(R.id.hours_view);
+            mRepair = (TextView) rootView.findViewById(R.id.repair_view);
 
             Log.v(LOG_TAG, "Business string: " + selectedBusiness);
 
@@ -131,6 +145,12 @@ public class DetailActivity extends AppCompatActivity {
                         data.add(lookingForBID.getString(6));
                         lat = lookingForBID.getDouble(7);
                         lng = lookingForBID.getDouble(8);
+
+                        mAddress.setText(lookingForBID.getString(4));
+                        mPhone.setText(lookingForBID.getString(3));
+                        mWebsite.setText(lookingForBID.getString(2));
+                        mHours.setText(lookingForBID.getString(5));
+                        mRepair.setText(lookingForBID.getString(6));
                         break;
                     }
                 } catch (JSONException e) {
@@ -140,6 +160,7 @@ public class DetailActivity extends AppCompatActivity {
 
             Log.v(LOG_TAG, "This string " + data);
 
+            /*
             mDetailAdapter =
                     new ArrayAdapter<String>(
                             getActivity(),
@@ -147,10 +168,11 @@ public class DetailActivity extends AppCompatActivity {
                             R.id.list_item_detail_textview,
                             data
                     );
-            View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+            */
+            // View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-            ListView listView = (ListView) rootView.findViewById(R.id.listview_detail);
-            listView.setAdapter(mDetailAdapter);
+            // ListView listView = (ListView) rootView.findViewById(R.id.listview_detail);
+            // listView.setAdapter(mDetailAdapter);
 
             mImg = (ImageView) rootView.findViewById(R.id.static_map_view);
             String url = "http://maps.google.com/maps/api/staticmap?center=&markers=color:blue%7Clabel:S%7C" + lat + "," + lng + "&zoom=15&size=300x150&maptype=roadmap&sensor=false";
