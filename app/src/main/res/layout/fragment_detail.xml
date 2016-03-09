@@ -9,6 +9,11 @@
     tools:context="com.example.eric.reuserepair.app.DetailActivity$DetailFragment"
     tools:showIn="@layout/activity_detail">
 
+    <ImageView
+        android:id="@+id/static_map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <ListView
         android:text="@string/title_activity_detail"
         android:id="@+id/listview_detail"
