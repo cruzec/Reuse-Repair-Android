@@ -20,7 +20,7 @@
         android:layout_marginBottom="83dp" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Locate a Business"
         android:id="@+id/main_button"
@@ -29,18 +29,18 @@
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Link 2"
+        android:text="Republic Curbside"
         android:id="@+id/link_button2"
         android:layout_gravity="center"
         android:layout_below="@+id/link_button1"
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Link 1"
+        android:text="Republic Recycling"
         android:id="@+id/link_button1"
         android:layout_gravity="center"
         android:layout_below="@+id/main_button"

@@ -2,6 +2,7 @@ package com.example.eric.reuserepair.app;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -52,6 +54,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
+        Intent intent = getIntent();
+
+        ArrayList<String> latLong = intent.getStringArrayListExtra("latLong");
+
         // Check for location permission before finding user's last known coordinates
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -65,12 +71,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         Location location = locationManager.getLastKnownLocation(locationManager
                 .getBestProvider(criteria, false));
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
+        //double latitude = 37.4224504;//location.getLatitude();
+        //double longitude = -122.0840859;//location.getLongitude();
+        double latitude = 0;
+        double longitude = 0;
 
-        if (location != null) {
+        for(int i = 0; i < latLong.size(); i++){
+            if(!latLong.get(i).toString().equals("null")&& i % 3 == 0){
+                latitude = Double.parseDouble(latLong.get(i).toString());
+                longitude = Double.parseDouble(latLong.get(i+1).toString());
+                LatLng latLng = new LatLng(latitude, longitude);
+                mMap.addMarker(new MarkerOptions().position(latLng).title(latLong.get(i + 2)));
+            }
+        }
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(44.564566, -123.262044), 12));
+
+/*        if (location != null) {
             LatLng latLng = new LatLng(latitude, longitude);
+            LatLng latLng2 = new LatLng(44.5779766, -123.261567);
             mMap.addMarker(new MarkerOptions().position(latLng).title("My Current Location"));
+            mMap.addMarker(new MarkerOptions().position(latLng2).title("My Current Location2"));
             // mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
         }
@@ -79,6 +99,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng sydney = new LatLng(-34, 151);
             mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        }
+        }*/
     }
 }

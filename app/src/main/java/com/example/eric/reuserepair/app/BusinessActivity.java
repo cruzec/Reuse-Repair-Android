@@ -1,5 +1,6 @@
 package com.example.eric.reuserepair.app;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,15 +39,6 @@ public class BusinessActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(this.getIntent().getExtras().getString("selectedItem"));
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(BusinessActivity.this, MapsActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -83,6 +76,8 @@ public class BusinessActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             ArrayList<String> BIDHolder = new ArrayList<String>();
             ArrayList<String> data = new ArrayList<String>();
+            //final ArrayList<Pair<String, String>> latLong = new ArrayList<Pair<String, String>>();\
+            final ArrayList<String> latLong = new ArrayList<String>();
             String allBusinessString = null;
             String allBusinessItemString;
             JSONArray businessArray = null;
@@ -155,6 +150,11 @@ public class BusinessActivity extends AppCompatActivity {
                     String key = lookingForBName.getString(0);
                     if(BIDHolder.contains(key)){
                         data.add(lookingForBName.getString(1));
+                        //latLong.add(new Pair<String, String>(lookingForBName.getString(7), lookingForBName.getString(8)));
+                        latLong.add(lookingForBName.getString(7));
+                        latLong.add(lookingForBName.getString(8));
+                        latLong.add(lookingForBName.getString(1));
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -173,7 +173,6 @@ public class BusinessActivity extends AppCompatActivity {
                             data
                     );
             View rootView = inflater.inflate(R.layout.fragment_business, container, false);
-
             ListView listView = (ListView) rootView.findViewById(R.id.listview_business);
             listView.setAdapter(mItemAdapter);
             final String finalAllBusinessString = allBusinessString;
@@ -186,6 +185,20 @@ public class BusinessActivity extends AppCompatActivity {
                     intent.putExtra("allBusiness", finalAllBusinessString);
                     intent.putExtra("business", item);
                     startActivity(intent);
+                }
+            });
+
+
+            FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), MapsActivity.class).putStringArrayListExtra("latLong",  (ArrayList<String>) latLong);
+                    startActivity(intent);
+
+                    /*Intent intent = new Intent(getActivity(), MapsActivity.class);
+                    startActivity(intent);*/
                 }
             });
 
