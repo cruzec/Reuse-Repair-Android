@@ -1,8 +1,10 @@
 package com.example.eric.reuserepair.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
@@ -45,35 +47,18 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(this.getIntent().getExtras().getString("business"));
-
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        */
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -89,7 +74,6 @@ public class DetailActivity extends AppCompatActivity {
         private TextView mPhone;
         private TextView mHours;
         private TextView mRepair;
-        // ArrayAdapter<String> mDetailAdapter;
 
         private final String LOG_TAG = DetailFragment.class.getSimpleName();
 
@@ -99,12 +83,6 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-
-            /*
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                    .permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-            */
 
             int businessID = 0;
             ArrayList<String> data = new ArrayList<String>();
@@ -120,6 +98,7 @@ public class DetailActivity extends AppCompatActivity {
             mWebsite = (TextView) rootView.findViewById(R.id.site_view);
             mHours = (TextView) rootView.findViewById(R.id.hours_view);
             mRepair = (TextView) rootView.findViewById(R.id.repair_view);
+            String address = null;
 
             Log.v(LOG_TAG, "Business string: " + selectedBusiness);
 
@@ -146,7 +125,8 @@ public class DetailActivity extends AppCompatActivity {
                         lat = lookingForBID.getDouble(7);
                         lng = lookingForBID.getDouble(8);
 
-                        mAddress.setText(lookingForBID.getString(4));
+                        address = lookingForBID.getString(4);
+                        mAddress.setText(address);
                         mPhone.setText(lookingForBID.getString(3));
                         mWebsite.setText(lookingForBID.getString(2));
                         mHours.setText(lookingForBID.getString(5));
@@ -159,20 +139,6 @@ public class DetailActivity extends AppCompatActivity {
             }
 
             Log.v(LOG_TAG, "This string " + data);
-
-            /*
-            mDetailAdapter =
-                    new ArrayAdapter<String>(
-                            getActivity(),
-                            R.layout.list_item_detail,
-                            R.id.list_item_detail_textview,
-                            data
-                    );
-            */
-            // View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-
-            // ListView listView = (ListView) rootView.findViewById(R.id.listview_detail);
-            // listView.setAdapter(mDetailAdapter);
 
             mImg = (ImageView) rootView.findViewById(R.id.static_map_view);
             String url = "http://maps.google.com/maps/api/staticmap?center=&markers=color:blue%7Clabel:S%7C" + lat + "," + lng + "&zoom=15&size=300x150&maptype=roadmap&sensor=false";
@@ -187,46 +153,18 @@ public class DetailActivity extends AppCompatActivity {
             }
             mImg.setImageBitmap(bm);
 
-            //BitmapFactory.Options bmOptions;
-            //bmOptions = new BitmapFactory.Options();
-            //Bitmap bm = loadBitmap(url, bmOptions);
+            final double fLat = lat;
+            final double fLng = lng;
+            final String fAddress = address;
+            mImg.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:<" + fLat + ">,<" + fLng + ">?q=<" + fLat + ">,<" + fLng + ">(" + fAddress +")"));
+                    startActivity(intent);
+                }
+            });
 
             return rootView;
         }
-
-        /*
-        public static Bitmap loadBitmap(String URL, BitmapFactory.Options options) {
-            Bitmap bitmap = null;
-            InputStream in = null;
-            try {
-                in = OpenHttpConnection(URL);
-                bitmap = BitmapFactory.decodeStream(in, null, options);
-                in.close();
-            } catch (IOException e1) {
-            }
-            return bitmap;
-        }
-        */
-
-        /*
-        private static InputStream OpenHttpConnection(String strURL)
-                throws IOException {
-            InputStream inputStream = null;
-            URL url = new URL(strURL);
-            URLConnection conn = url.openConnection();
-
-            try {
-                HttpURLConnection httpConn = (HttpURLConnection) conn;
-                httpConn.setRequestMethod("GET");
-                httpConn.connect();
-
-                if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    inputStream = httpConn.getInputStream();
-                }
-            } catch (Exception ex) {
-            }
-            return inputStream;
-        }
-        */
     }
 }

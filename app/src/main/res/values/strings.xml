@@ -6,7 +6,7 @@
     <string name="title_activity_category">Categories</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_detail">Details</string>
-    <string name="detail_address">Address</string>
+    <string name="detail_address">Location</string>
     <string name="detail_phone">Call</string>
     <string name="detail_url">Website</string>
     <string name="detail_hours">Hours</string>
