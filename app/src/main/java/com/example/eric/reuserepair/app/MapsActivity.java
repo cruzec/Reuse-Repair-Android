@@ -17,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -71,8 +72,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         Location location = locationManager.getLastKnownLocation(locationManager
                 .getBestProvider(criteria, false));
-        //double latitude = 37.4224504;//location.getLatitude();
-        //double longitude = -122.0840859;//location.getLongitude();
+        double myLat = location.getLatitude();
+        double myLng = location.getLongitude();
+        LatLng myLatLng = new LatLng(myLat, myLng);
+        mMap.addMarker(new MarkerOptions().position(myLatLng).title("My Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
         double latitude = 0;
         double longitude = 0;
 
