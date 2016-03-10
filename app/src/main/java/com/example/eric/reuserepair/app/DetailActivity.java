@@ -99,6 +99,7 @@ public class DetailActivity extends AppCompatActivity {
             mHours = (TextView) rootView.findViewById(R.id.hours_view);
             mRepair = (TextView) rootView.findViewById(R.id.repair_view);
             String address = null;
+            String phoneNum = null;
 
             Log.v(LOG_TAG, "Business string: " + selectedBusiness);
 
@@ -127,7 +128,8 @@ public class DetailActivity extends AppCompatActivity {
 
                         address = lookingForBID.getString(4);
                         mAddress.setText(address);
-                        mPhone.setText(lookingForBID.getString(3));
+                        phoneNum = lookingForBID.getString(3);
+                        mPhone.setText(phoneNum);
                         mWebsite.setText(lookingForBID.getString(2));
                         mHours.setText(lookingForBID.getString(5));
                         mRepair.setText(lookingForBID.getString(6));
@@ -140,6 +142,18 @@ public class DetailActivity extends AppCompatActivity {
 
             Log.v(LOG_TAG, "This string " + data);
 
+            final String fPhoneNum = phoneNum;
+            if (phoneNum != null) {
+                mPhone.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View view) {
+                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                        callIntent.setData(Uri.parse("tel:" + fPhoneNum));
+                        startActivity(callIntent);
+                    }
+                });
+            }
+
+            // Get Google Static Map image of location marker
             mImg = (ImageView) rootView.findViewById(R.id.static_map_view);
             String url = "http://maps.google.com/maps/api/staticmap?center=&markers=color:blue%7Clabel:S%7C" + lat + "," + lng + "&zoom=15&size=300x150&maptype=roadmap&sensor=false";
             GetMapsImage getMapsImage = new GetMapsImage();
@@ -157,7 +171,7 @@ public class DetailActivity extends AppCompatActivity {
             final double fLng = lng;
             final String fAddress = address;
             mImg.setOnClickListener(new View.OnClickListener() {
-
+                // Open Google Maps on click
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:<" + fLat + ">,<" + fLng + ">?q=<" + fLat + ">,<" + fLng + ">(" + fAddress +")"));
                     startActivity(intent);
