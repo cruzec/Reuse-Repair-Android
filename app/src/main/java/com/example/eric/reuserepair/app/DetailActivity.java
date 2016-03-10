@@ -134,7 +134,13 @@ public class DetailActivity extends AppCompatActivity {
                         website = lookingForBID.getString(2);
                         mWebsite.setText(website);
                         mHours.setText(lookingForBID.getString(5));
-                        mRepair.setText(lookingForBID.getString(6));
+
+                        if (lookingForBID.getInt(6) != 0) {
+                            mRepair.setText("Yes");
+                        }
+                        else {
+                            mRepair.setText("No");
+                        }
                         break;
                     }
                 } catch (JSONException e) {
@@ -184,16 +190,20 @@ public class DetailActivity extends AppCompatActivity {
             }
             mImg.setImageBitmap(bm);
 
+            // Make Google Static Map image clickable
             final double fLat = lat;
             final double fLng = lng;
             final String fAddress = address;
-            mImg.setOnClickListener(new View.OnClickListener() {
-                // Open Google Maps on click
-                public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:<" + fLat + ">,<" + fLng + ">?q=<" + fLat + ">,<" + fLng + ">(" + fAddress +")"));
-                    startActivity(intent);
-                }
-            });
+
+            if (lat != 0.0 && lng != 0.0) {
+                mImg.setOnClickListener(new View.OnClickListener() {
+                    // Open Google Maps on click
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:<" + fLat + ">,<" + fLng + ">?q=<" + fLat + ">,<" + fLng + ">(" + fAddress + ")"));
+                        startActivity(intent);
+                    }
+                });
+            }
 
             return rootView;
         }
