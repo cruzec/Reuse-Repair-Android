@@ -100,6 +100,7 @@ public class DetailActivity extends AppCompatActivity {
             mRepair = (TextView) rootView.findViewById(R.id.repair_view);
             String address = null;
             String phoneNum = null;
+            String website = null;
 
             Log.v(LOG_TAG, "Business string: " + selectedBusiness);
 
@@ -130,7 +131,8 @@ public class DetailActivity extends AppCompatActivity {
                         mAddress.setText(address);
                         phoneNum = lookingForBID.getString(3);
                         mPhone.setText(phoneNum);
-                        mWebsite.setText(lookingForBID.getString(2));
+                        website = lookingForBID.getString(2);
+                        mWebsite.setText(website);
                         mHours.setText(lookingForBID.getString(5));
                         mRepair.setText(lookingForBID.getString(6));
                         break;
@@ -142,6 +144,7 @@ public class DetailActivity extends AppCompatActivity {
 
             Log.v(LOG_TAG, "This string " + data);
 
+            // Open dialer on click for business phone number
             final String fPhoneNum = phoneNum;
             if (phoneNum != null) {
                 mPhone.setOnClickListener(new View.OnClickListener() {
@@ -149,6 +152,20 @@ public class DetailActivity extends AppCompatActivity {
                         Intent callIntent = new Intent(Intent.ACTION_DIAL);
                         callIntent.setData(Uri.parse("tel:" + fPhoneNum));
                         startActivity(callIntent);
+                    }
+                });
+            }
+
+            // Open browser on click for business website
+            final String fWebsite = website;
+            if (website != null) {
+                mWebsite.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        Uri uri = Uri.parse(fWebsite);
+                        Intent intent3 = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent3);
                     }
                 });
             }
