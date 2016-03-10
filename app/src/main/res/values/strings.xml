@@ -10,6 +10,7 @@
     <string name="detail_phone">Call</string>
     <string name="detail_url">Website</string>
     <string name="detail_hours">Hours</string>
-    <string name="detail_repair">Repair</string>
+    <string name="detail_repair">Repairable?</string>
     <string name="google_static_map_desc">Image of static Google Map of this location</string>
+    <string name="na">n/a</string>
 </resources>
