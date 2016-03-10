@@ -161,9 +161,6 @@ public class BusinessActivity extends AppCompatActivity {
                 }
             }
 
-
-            //List<String> item = new ArrayList<String>(Arrays.asList(data));
-
             // Create an ArrayAdapter for the blank category list to populate ListView
             mItemAdapter =
                     new ArrayAdapter<String>(
