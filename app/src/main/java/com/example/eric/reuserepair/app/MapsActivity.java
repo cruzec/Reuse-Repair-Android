@@ -19,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = getIntent();
 
         ArrayList<String> latLong = intent.getStringArrayListExtra("latLong");
+        final String businesses = intent.getExtras().getString("businesses");
 
         // Check for location permission before finding user's last known coordinates
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -85,10 +87,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 latitude = Double.parseDouble(latLong.get(i).toString());
                 longitude = Double.parseDouble(latLong.get(i+1).toString());
                 LatLng latLng = new LatLng(latitude, longitude);
-                mMap.addMarker(new MarkerOptions().position(latLng).title(latLong.get(i + 2)));
+                String businessName = latLong.get(i+2);
+                mMap.addMarker(new MarkerOptions().position(latLng).title(businessName));
             }
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(44.564566, -123.262044), 12));
+
+        // Make marker window clickable to show DetailActivity
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+
+            @Override
+            public void onInfoWindowClick(Marker m) {
+                String markerName = m.getTitle();
+                Intent intent = new Intent(MapsActivity.this, DetailActivity.class);
+                intent.putExtra("allBusiness", businesses);
+                intent.putExtra("business", markerName);
+                startActivity(intent);
+            }
+        });
 
 /*        if (location != null) {
             LatLng latLng = new LatLng(latitude, longitude);

@@ -192,6 +192,7 @@ public class BusinessActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getActivity(), MapsActivity.class).putStringArrayListExtra("latLong",  (ArrayList<String>) latLong);
+                    intent.putExtra("businesses", finalAllBusinessString);
                     startActivity(intent);
 
                     /*Intent intent = new Intent(getActivity(), MapsActivity.class);
