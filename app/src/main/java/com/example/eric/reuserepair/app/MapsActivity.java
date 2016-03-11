@@ -13,8 +13,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -22,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.lang.Object;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +86,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double latitude = 0;
         double longitude = 0;
 
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for(int i = 0; i < latLong.size(); i++){
             if(!latLong.get(i).toString().equals("null")&& i % 3 == 0){
                 latitude = Double.parseDouble(latLong.get(i).toString());
@@ -89,9 +95,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLng latLng = new LatLng(latitude, longitude);
                 String businessName = latLong.get(i+2);
                 mMap.addMarker(new MarkerOptions().position(latLng).title(businessName));
+                builder.include(latLng);
             }
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(44.564566, -123.262044), 12));
+        LatLngBounds bounds = builder.build();
+        int padding = 100;
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        mMap.moveCamera(cu);
+        // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(44.564566, -123.262044), 12));
 
         // Make marker window clickable to show DetailActivity
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -105,20 +116,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intent);
             }
         });
-
-/*        if (location != null) {
-            LatLng latLng = new LatLng(latitude, longitude);
-            LatLng latLng2 = new LatLng(44.5779766, -123.261567);
-            mMap.addMarker(new MarkerOptions().position(latLng).title("My Current Location"));
-            mMap.addMarker(new MarkerOptions().position(latLng2).title("My Current Location2"));
-            // mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-        }
-        else {
-            // Add a marker in Sydney and move the camera
-            LatLng sydney = new LatLng(-34, 151);
-            mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        }*/
     }
 }
