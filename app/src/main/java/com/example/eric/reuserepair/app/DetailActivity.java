@@ -101,6 +101,7 @@ public class DetailActivity extends AppCompatActivity {
             String address = null;
             String phoneNum = null;
             String website = null;
+            String hours = null;
 
             Log.v(LOG_TAG, "Business string: " + selectedBusiness);
 
@@ -128,12 +129,28 @@ public class DetailActivity extends AppCompatActivity {
                         lng = lookingForBID.getDouble(8);
 
                         address = lookingForBID.getString(4);
+                        if (address == null || address.equals("null")) {
+                            address = "n/a";
+                        }
                         mAddress.setText(address);
+
                         phoneNum = lookingForBID.getString(3);
+                        if (phoneNum == null || phoneNum.equals("null")) {
+                            phoneNum = "n/a";
+                        }
                         mPhone.setText(phoneNum);
+
                         website = lookingForBID.getString(2);
+                        if (website == null || website.equals("null")) {
+                            website = "n/a";
+                        }
                         mWebsite.setText(website);
-                        mHours.setText(lookingForBID.getString(5));
+
+                        hours = lookingForBID.getString(5);
+                        if (hours == null || hours.equals("null")) {
+                            hours = "n/a";
+                        }
+                        mHours.setText(hours);
 
                         if (lookingForBID.getInt(6) != 0) {
                             mRepair.setText("Yes");
