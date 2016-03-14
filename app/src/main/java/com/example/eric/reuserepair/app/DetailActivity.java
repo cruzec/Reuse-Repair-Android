@@ -51,11 +51,13 @@ public class DetailActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(this.getIntent().getExtras().getString("business"));
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+    */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

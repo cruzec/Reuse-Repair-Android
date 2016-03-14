@@ -78,16 +78,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
+        // Set marker for user's last known location
         Location location = locationManager.getLastKnownLocation(locationManager
                 .getBestProvider(criteria, false));
-        double myLat = location.getLatitude();
-        double myLng = location.getLongitude();
-        LatLng myLatLng = new LatLng(myLat, myLng);
-        mMap.addMarker(new MarkerOptions().position(myLatLng).title("My Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+        if (location != null) {
+            double myLat = location.getLatitude();
+            double myLng = location.getLongitude();
+            LatLng myLatLng = new LatLng(myLat, myLng);
+            mMap.addMarker(new MarkerOptions().position(myLatLng).title("My Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+        }
 
         double latitude = 0;
         double longitude = 0;
-
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for(int i = 0; i < latLong.size(); i++){
