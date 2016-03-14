@@ -63,7 +63,8 @@ public class BusinessActivity extends AppCompatActivity {
     // Prompts message if Locations is disabled
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Your GPS seems to be disabled. Would you like to enable it?")
+        builder.setMessage("Location is turned off. Would you like to enable it?")
+                .setTitle("Use location?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog,  final int id) {
