@@ -13,7 +13,13 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,14 +36,23 @@ import java.lang.Object;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+/*
+Code borrowed from: http://stackoverflow.com/questions/32567839/returned-location-is-always-null-in-googleapiclient
+ */
+
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
 
     private GoogleMap mMap;
+    private LocationRequest mLocationRequest;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+    private Marker mMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -45,6 +60,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        buildGoogleApiClient();
+        mGoogleApiClient.connect();
+
+        if (mMap == null) {
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+
+            mapFragment.getMapAsync(this);
+        }
+    }
 
     /**
      * Manipulates the map once available.
@@ -58,6 +87,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+
         LocationManager locationManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
@@ -67,6 +108,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ArrayList<String> latLong = intent.getStringArrayListExtra("latLong");
         final String businesses = intent.getExtras().getString("businesses");
 
+        /*
         // Check for location permission before finding user's last known coordinates
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -88,17 +130,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng myLatLng = new LatLng(myLat, myLng);
             mMap.addMarker(new MarkerOptions().position(myLatLng).title("My Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
         }
+        */
 
         double latitude = 0;
         double longitude = 0;
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for(int i = 0; i < latLong.size(); i++){
-            if(!latLong.get(i).toString().equals("null")&& i % 3 == 0){
+        for (int i = 0; i < latLong.size(); i++) {
+            if (!latLong.get(i).toString().equals("null") && i % 3 == 0) {
                 latitude = Double.parseDouble(latLong.get(i).toString());
-                longitude = Double.parseDouble(latLong.get(i+1).toString());
+                longitude = Double.parseDouble(latLong.get(i + 1).toString());
                 LatLng latLng = new LatLng(latitude, longitude);
-                String businessName = latLong.get(i+2);
+                String businessName = latLong.get(i + 2);
                 mMap.addMarker(new MarkerOptions().position(latLng).title(businessName));
                 builder.include(latLng);
             }
@@ -121,5 +164,73 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        // Toast.makeText(this, "buildGoogleApiClient", Toast.LENGTH_SHORT).show();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        // Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
+
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+
+        //mLocationRequest.setSmallestDisplacement(0.1F);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Toast.makeText(this,"Connection Suspended",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Toast.makeText(this,"Connection Failed",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLastLocation = location;
+
+        //remove previous current location Marker
+        if (mMarker != null){
+            mMarker.remove();
+        }
+
+        double dLatitude = mLastLocation.getLatitude();
+        double dLongitude = mLastLocation.getLongitude();
+        mMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(dLatitude, dLongitude))
+                .title("My Location").icon(BitmapDescriptorFactory
+                        .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
     }
 }
