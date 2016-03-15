@@ -32,6 +32,10 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
+
+/*
+Code borrowed from Google's Udacity course: https://www.udacity.com/course/developing-android-apps--ud853?utm_medium=referral&utm_campaign=api
+ */
 public class MainActivityFragment extends Fragment {
 
     public MainActivityFragment() {
