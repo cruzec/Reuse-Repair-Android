@@ -1,7 +1,10 @@
 package com.example.eric.reuserepair.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,12 +32,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class CategoryActivity extends AppCompatActivity {
+
+    public boolean isInternetAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            isAvailable = true;
+        }
+        return isAvailable;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +58,9 @@ public class CategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (!isInternetAvailable()) {
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /*
