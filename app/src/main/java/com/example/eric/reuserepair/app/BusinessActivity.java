@@ -59,7 +59,6 @@ public class BusinessActivity extends AppCompatActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    // private final String LOG_TAG = BusinessActivity.class.getSimpleName();
     private GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     static double myLat;
@@ -276,6 +275,7 @@ public class BusinessActivity extends AppCompatActivity
                     if(BIDHolder.contains(key)){
                         data.add(lookingForBName.getString(1));
 
+                        // Get distance between user and business
                         if (myLat != 0.0 && myLng != 0.0) {
                             try {
                                 Location locationA = new Location("point A");
@@ -310,7 +310,6 @@ public class BusinessActivity extends AppCompatActivity
                             places.add(newPlace);
                         }
 
-                        //latLong.add(new Pair<String, String>(lookingForBName.getString(7), lookingForBName.getString(8)));
                         latLong.add(lookingForBName.getString(7));
                         latLong.add(lookingForBName.getString(8));
                         latLong.add(lookingForBName.getString(1));
