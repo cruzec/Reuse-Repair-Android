@@ -78,9 +78,7 @@ public class BusinessActivity extends AppCompatActivity
         getSupportActionBar().setTitle(this.getIntent().getExtras().getString("selectedItem"));
     }
 
-    /*
-    Code borrowed from http://stackoverflow.com/questions/25175522/how-to-enable-location-access-programatically-in-android
-    */
+    // Prompts message if Locations is disabled
     public void statusCheck() {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -90,7 +88,9 @@ public class BusinessActivity extends AppCompatActivity
         }
     }
 
-    // Prompts message if Locations is disabled
+    /*
+    Code borrowed from http://stackoverflow.com/questions/25175522/how-to-enable-location-access-programatically-in-android
+    */
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Location is turned off. Would you like to enable it?")
@@ -110,15 +110,6 @@ public class BusinessActivity extends AppCompatActivity
         alert.show();
     }
 
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-    */
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -134,16 +125,6 @@ public class BusinessActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /*
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        buildGoogleApiClient();
-        mGoogleApiClient.connect();
-    }
-    */
-
     @Override
     protected void onPause(){
         super.onPause();
@@ -153,7 +134,6 @@ public class BusinessActivity extends AppCompatActivity
     }
 
     protected synchronized void buildGoogleApiClient() {
-        // Toast.makeText(this, "buildGoogleApiClient", Toast.LENGTH_SHORT).show();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -163,15 +143,12 @@ public class BusinessActivity extends AppCompatActivity
 
     @Override
     public void onConnected(Bundle bundle) {
-        // Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
 
         LocationRequest mLocationRequest;
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(0);
         mLocationRequest.setFastestInterval(0);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        //mLocationRequest.setSmallestDisplacement(0.1F);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -225,8 +202,6 @@ public class BusinessActivity extends AppCompatActivity
             ArrayList<String> BIDHolder = new ArrayList<String>();
             ArrayList<String> data = new ArrayList<String>();
             ArrayList<Place> places = new ArrayList<Place>();
-            //ArrayList<Double> distance = new ArrayList<Double>();
-            //final ArrayList<Pair<String, String>> latLong = new ArrayList<Pair<String, String>>();\
             final ArrayList<String> latLong = new ArrayList<String>();
             String allBusinessString = null;
             String allBusinessItemString;
@@ -353,19 +328,13 @@ public class BusinessActivity extends AppCompatActivity
                }
             });
 
-            /*
-            for (Place place_ : places) {
-                Log.v(LOG_TAG, "Dis: " + place_.getName());
-                Log.v(LOG_TAG, "Dis: " + place_.getDistance());
-            }
-            */
-
             mItemAdapter = new PlaceAdapter(getActivity(), places);
             View rootView = inflater.inflate(R.layout.fragment_business, container, false);
             ListView listView = (ListView) rootView.findViewById(R.id.listview_business);
             listView.setAdapter(mItemAdapter);
 
             final String finalAllBusinessString = allBusinessString;
+            // On-click listener to open DetailActivity
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
@@ -386,9 +355,6 @@ public class BusinessActivity extends AppCompatActivity
                     Intent intent = new Intent(getActivity(), MapsActivity.class).putStringArrayListExtra("latLong", (ArrayList<String>) latLong);
                     intent.putExtra("businesses", finalAllBusinessString);
                     startActivity(intent);
-
-                    /*Intent intent = new Intent(getActivity(), MapsActivity.class);
-                    startActivity(intent);*/
                 }
             });
 

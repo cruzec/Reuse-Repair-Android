@@ -63,15 +63,6 @@ public class CategoryActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-    */
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -121,6 +112,8 @@ public class CategoryActivity extends AppCompatActivity {
             // Get a reference to the ListView and attach this adapter to it
             ListView listView = (ListView) rootView.findViewById(R.id.listview_category);
             listView.setAdapter(mCategoryAdapter);
+
+            // On-click listener to open ItemActivity
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override

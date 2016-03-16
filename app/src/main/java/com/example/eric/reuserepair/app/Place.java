@@ -5,6 +5,7 @@ package com.example.eric.reuserepair.app;
  */
 
 public class Place {
+
     private String name;
     private double distance;
 

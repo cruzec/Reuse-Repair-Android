@@ -37,27 +37,7 @@ public class ItemActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(this.getIntent().getExtras().getString("category"));
-
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
     }
-
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-    */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -161,15 +141,6 @@ public class ItemActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            // Blank string which will be appended after GET request
-            /*String[] data = {
-                    "Harcoded item 1",
-                    "Harcoded item 2",
-                    "Harcoded item 3",
-                    "Harcoded item 4",
-                    "Harcoded item 5"
-            };*/
-            //List<String> item = new ArrayList<String>(Arrays.asList(data));
 
             // Create an ArrayAdapter for the blank category list to populate ListView
             mItemAdapter =
@@ -184,6 +155,8 @@ public class ItemActivity extends AppCompatActivity {
             ListView listView = (ListView) rootView.findViewById(R.id.listview_item);
             listView.setAdapter(mItemAdapter);
             final String finalAllItemsString = allItemsString;
+
+            // On-click listener to open BusinessActivity
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override

@@ -38,7 +38,7 @@ import java.util.List;
 
 /*
 Code borrowed from: http://stackoverflow.com/questions/32567839/returned-location-is-always-null-in-googleapiclient
- */
+*/
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -108,34 +108,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ArrayList<String> latLong = intent.getStringArrayListExtra("latLong");
         final String businesses = intent.getExtras().getString("businesses");
 
-        /*
-        // Check for location permission before finding user's last known coordinates
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-
-        // Set marker for user's last known location
-        Location location = locationManager.getLastKnownLocation(locationManager
-                .getBestProvider(criteria, false));
-        if (location != null) {
-            double myLat = location.getLatitude();
-            double myLng = location.getLongitude();
-            LatLng myLatLng = new LatLng(myLat, myLng);
-            mMap.addMarker(new MarkerOptions().position(myLatLng).title("My Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        }
-        */
-
         double latitude = 0;
         double longitude = 0;
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        // Adds each marker to map and builder (to set bounds for zooming into)
         for (int i = 0; i < latLong.size(); i++) {
             if (!latLong.get(i).toString().equals("null") && i % 3 == 0) {
                 latitude = Double.parseDouble(latLong.get(i).toString());
@@ -150,7 +128,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         int padding = 100;
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         mMap.moveCamera(cu);
-        // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(44.564566, -123.262044), 12));
 
         // Make marker window clickable to show DetailActivity
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -177,7 +154,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     protected synchronized void buildGoogleApiClient() {
-        // Toast.makeText(this, "buildGoogleApiClient", Toast.LENGTH_SHORT).show();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -187,14 +163,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onConnected(Bundle bundle) {
-        // Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
 
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-
-        //mLocationRequest.setSmallestDisplacement(0.1F);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling

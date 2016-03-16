@@ -38,6 +38,8 @@ public class PlaceAdapter extends ArrayAdapter<Place> {
         TextView placeDistance = (TextView) convertView.findViewById(R.id.placeDistance);
 
         placeName.setText(place.getName());
+
+        // Round to nearest decimal
         double d = (double) Math.round(place.getDistance() * 100 / 10) / 10;
         if (d == 0.0 || d > 100000) {
             placeDistance.setText("n/a");

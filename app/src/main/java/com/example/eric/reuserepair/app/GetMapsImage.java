@@ -13,6 +13,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+/*
+Code borrowed from: http://stackoverflow.com/questions/12088136/android-load-image-from-web-url
+*/
+
 /**
  * Created by Eric on 3/7/2016.
  */

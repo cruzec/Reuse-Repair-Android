@@ -51,14 +51,6 @@ public class DetailActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(this.getIntent().getExtras().getString("business"));
     }
 
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-    */
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -216,6 +208,7 @@ public class DetailActivity extends AppCompatActivity {
             final double fLng = lng;
             final String fAddress = address;
 
+            // On-click listener for open up Google Maps for selected coordinates
             if (lat != 0.0 && lng != 0.0) {
                 mImg.setOnClickListener(new View.OnClickListener() {
                     // Open Google Maps on click

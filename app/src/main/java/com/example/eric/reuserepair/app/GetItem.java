@@ -71,10 +71,6 @@ public class GetItem extends AsyncTask<String, Void, String> {
         }
     }
     public String readIt(InputStream stream) throws IOException, UnsupportedEncodingException {
-        //Reader reader = null;
-        //reader = new InputStreamReader(stream, "UTF-8");
-        //char[] buffer = new char[len];
-        //reader.read(buffer);
 
         BufferedReader r = new BufferedReader(new InputStreamReader(stream));
         StringBuilder total = new StringBuilder();
