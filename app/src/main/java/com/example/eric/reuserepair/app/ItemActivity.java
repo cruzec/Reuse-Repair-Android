@@ -1,3 +1,21 @@
+// CS419 - Reuse & Repair Mobile App
+// ---------------------------------------
+// Charles Jenkins
+// <jenkinch@oregonstate.edu>
+//
+// Billy Kerns
+// <kernsbi@oregonstate.edu>
+//
+// Eric Cruz
+// <cruze@oregonstate.edu>
+//
+// Title: ItemActivity.java
+//
+// Description: Activity to display items
+// related to the category that the user
+// selected
+// ---------------------------------------
+
 package com.example.eric.reuserepair.app;
 
 import android.content.Intent;
@@ -41,12 +59,7 @@ public class ItemActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -55,7 +68,7 @@ public class ItemActivity extends AppCompatActivity {
     }
 
     /**
-     * A placeholder fragment containing a simple view.
+     * A fragment to display the items related to the category.
      */
     public static class ItemFragment extends Fragment {
         ArrayAdapter<String> mItemAdapter;
@@ -65,7 +78,8 @@ public class ItemActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            String selectedCat = getActivity().getIntent().getExtras().getString("category");//test until we can figure out how to get selected category
+
+            String selectedCat = getActivity().getIntent().getExtras().getString("category");
             String allItemsString = null;
             String allCategoriesString = null;
             String allItemCategoriesString = null;
@@ -81,6 +95,7 @@ public class ItemActivity extends AppCompatActivity {
             String CID = null;
             ArrayList<String> selectedItemNumbers = new ArrayList<String>();
             ArrayList<String> data = new ArrayList<String>();
+            //Get JSON for item, category, and item-category table
             try {
                 allItemsString = allItems.execute().get();
                 JSONObject itemsJSONObj = new JSONObject(allItemsString);
@@ -105,7 +120,8 @@ public class ItemActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+            //Go through categories until selected category is found.
+            //Get the id of this category
             for(int i = 0; i < categoryArray.length(); i++){
                 try {
                     JSONArray lookingForSelected = categoryArray.getJSONArray(i);
@@ -117,7 +133,9 @@ public class ItemActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
+            //Go through item-categories looking for the found
+            //category id.
+            //Add item iid of matches
             for(int i = 0; i < itemsCategoriesArray.length(); i++){
                 try {
                     JSONArray lookingForCID = itemsCategoriesArray.getJSONArray(i);
@@ -129,7 +147,9 @@ public class ItemActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
+            //Go through item looking for id s that
+            //match the selected iid s.
+            //If found add item name to array
             for(int i = 0; i < itemsArray.length(); i++){
                 try {
                     JSONArray lookingForIID = itemsArray.getJSONArray(i);

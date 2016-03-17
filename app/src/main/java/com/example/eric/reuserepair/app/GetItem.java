@@ -1,3 +1,23 @@
+// CS419 - Reuse & Repair Mobile App
+// ---------------------------------------
+// Charles Jenkins
+// <jenkinch@oregonstate.edu>
+//
+// Billy Kerns
+// <kernsbi@oregonstate.edu>
+//
+// Eric Cruz
+// <cruze@oregonstate.edu>
+//
+// Title: GetItem.java
+//
+// Description: Makes a network call to our
+// web service to get all rows from the
+// item table
+// ---------------------------------------
+// Acknowledgements:
+// http://developer.android.com/training/basics/network-ops/connecting.html
+
 package com.example.eric.reuserepair.app;
 
 import android.os.AsyncTask;
@@ -14,14 +34,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by Billy Kerns on 2/15/2016.
- */
 public class GetItem extends AsyncTask<String, Void, String> {
-
-    private static final String DEBUG_TAG = "HttpExample";
-
+    //Based on http://developer.android.com/training/basics/network-ops/connecting.html
     protected String doInBackground(String... urls) {
+        //Create URL we will be requesting data from
         String reuseAndRepairAPI = "http://web.engr.oregonstate.edu/~jenkinch/api.php/item";
         try {
             return downloadUrl(reuseAndRepairAPI);
@@ -29,49 +45,35 @@ public class GetItem extends AsyncTask<String, Void, String> {
             return "Unable to retrieve web page. URL may be invalid.";
         }
     }
-    // onPostExecute displays the results of the AsyncTask.
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
     }
 
-    // Given a URL, establishes an HttpUrlConnection and retrieves
-// the web page content as a InputStream, which it returns as
-// a string.
     private String downloadUrl(String myurl) throws IOException {
         InputStream is = null;
-        // Only display the first 500 characters of the retrieved
-        // web page content.
-
         try {
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
+            //So we don't hang forever on a bad network call
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(15000);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             conn.setRequestProperty("Accept", "application/json");
-            // Starts the query
             conn.connect();
-            int response = conn.getResponseCode();
-            Log.d(DEBUG_TAG, "The response is: " + response);
             is = conn.getInputStream();
-
-            // Convert the InputStream into a string
 
             String contentAsString = readIt(is);
             return contentAsString;
-
-            // Makes sure that the InputStream is closed after the app is
-            // finished using it.
         } finally {
             if (is != null) {
                 is.close();
             }
         }
     }
+    //Turn input into string
     public String readIt(InputStream stream) throws IOException, UnsupportedEncodingException {
-
         BufferedReader r = new BufferedReader(new InputStreamReader(stream));
         StringBuilder total = new StringBuilder();
         String line;

@@ -1,3 +1,23 @@
+// CS419 - Reuse & Repair Mobile App
+// ---------------------------------------
+// Charles Jenkins
+// <jenkinch@oregonstate.edu>
+//
+// Billy Kerns
+// <kernsbi@oregonstate.edu>
+//
+// Eric Cruz
+// <cruze@oregonstate.edu>
+//
+// Title: BusinessActivity.java
+//
+// Description: Activity to display businesses related to the item
+// selected by the user
+// ---------------------------------------
+// Acknowledgements:
+// http://stackoverflow.com/questions/32567839/returned-location-is-always-null-in-googleapiclient
+// http://stackoverflow.com/questions/25175522/how-to-enable-location-access-programatically-in-android
+
 package com.example.eric.reuserepair.app;
 
 import android.Manifest;
@@ -48,13 +68,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Billy Kerns on 2/16/2016.
- */
-
-/*
-Code borrowed from: http://stackoverflow.com/questions/32567839/returned-location-is-always-null-in-googleapiclient
-*/
 public class BusinessActivity extends AppCompatActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -88,7 +101,8 @@ public class BusinessActivity extends AppCompatActivity
     }
 
     /*
-    Code borrowed from http://stackoverflow.com/questions/25175522/how-to-enable-location-access-programatically-in-android
+    Code based on http://stackoverflow.com/questions/25175522/how-to-enable-location-access-programatically-in-android
+    Let user know that their location services are turned off.  Without this the app may not function properly
     */
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -111,12 +125,7 @@ public class BusinessActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -150,7 +159,6 @@ public class BusinessActivity extends AppCompatActivity
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -180,11 +188,10 @@ public class BusinessActivity extends AppCompatActivity
 
         String lat = String.valueOf(myLat);
         String lng = String.valueOf(myLng);
-        // Log.v(LOG_TAG, "LatLong: " + lat + " " + lng);
     }
 
     /**
-     * A placeholder fragment containing a simple view.
+     * A fragment containing to display the businesses.
      */
     public static class BusinessFragment extends Fragment {
 
@@ -208,7 +215,9 @@ public class BusinessActivity extends AppCompatActivity
             JSONArray itemBusinessArray = null;
             GetBusiness allBusiness = new GetBusiness();
             GetItemBusiness allItemBusiness = new GetItemBusiness();
-
+            //Make requests to web service
+            //Set the responses to strings
+            //Turn these strings into JSONArrays
             try {
                 allBusinessString = allBusiness.execute().get();
                 JSONObject businessJSONObj = new JSONObject(allBusinessString);
@@ -228,12 +237,12 @@ public class BusinessActivity extends AppCompatActivity
                 e.printStackTrace();
             }
 
-
+            //Get the item the user selected in the previous activity
             JSONArray itemsArray = null;
             String selectedItem = getActivity().getIntent().getExtras().getString("selectedItem");
             String selectedItemIID = null;
             JSONObject itemsJSONObj = null;
-
+            //Get string with the items table JSON then convert to JSONArray
             try {
                 itemsJSONObj = new JSONObject(getActivity().getIntent().getExtras().getString("allItems"));
                 itemsJSONObj = new JSONObject(itemsJSONObj.get("item").toString());
@@ -241,7 +250,9 @@ public class BusinessActivity extends AppCompatActivity
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+            //Sort through itemArray looking for a name that
+            //matches our selected item string
+            //When found get the id associated with the name
             for(int i = 0; i < itemsArray.length(); i++){
                 try {
                     JSONArray lookingForIID = itemsArray.getJSONArray(i);
@@ -254,20 +265,24 @@ public class BusinessActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
             }
-
+            //Go through item-business table response data looking
+            //for iid that match the item id found previously.
+            //When found add business id to array
             for(int i = 0; i < itemBusinessArray.length(); i++){
                 try {
                     JSONArray lookingForBID = itemBusinessArray.getJSONArray(i);
                     String key = lookingForBID.getString(0);
                     if(key.equals(selectedItemIID)){
-                        //selectedItemIID = lookingForBID.getString(0);
                         BIDHolder.add(lookingForBID.getString(1));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
+            //Go through results of getting business table
+            //looking for ids that are in the BIDHolder array.
+            //If found get latitude and longitude information
+            //about business
             for(int i = 0; i < businessArray.length(); i++){
                 try {
                     JSONArray lookingForBName = businessArray.getJSONArray(i);
@@ -309,7 +324,7 @@ public class BusinessActivity extends AppCompatActivity
                             Place newPlace = new Place(lookingForBName.getString(1), 0.0);
                             places.add(newPlace);
                         }
-
+                        //add latitude, longitude, and business name to latLong array
                         latLong.add(lookingForBName.getString(7));
                         latLong.add(lookingForBName.getString(8));
                         latLong.add(lookingForBName.getString(1));

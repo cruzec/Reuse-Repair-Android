@@ -1,3 +1,21 @@
+// CS419 - Reuse & Repair Mobile App
+// ---------------------------------------
+// Charles Jenkins
+// <jenkinch@oregonstate.edu>
+//
+// Billy Kerns
+// <kernsbi@oregonstate.edu>
+//
+// Eric Cruz
+// <cruze@oregonstate.edu>
+//
+// Title: PlaceAdapter.java
+//
+// Description: custom adapter for
+// being able to do a double-textview
+// to display business name and distance
+// ---------------------------------------
+
 package com.example.eric.reuserepair.app;
 
 import android.app.Activity;

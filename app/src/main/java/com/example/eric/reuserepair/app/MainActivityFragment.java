@@ -1,3 +1,23 @@
+// CS419 - Reuse & Repair Mobile App
+// ---------------------------------------
+// Charles Jenkins
+// <jenkinch@oregonstate.edu>
+//
+// Billy Kerns
+// <kernsbi@oregonstate.edu>
+//
+// Eric Cruz
+// <cruze@oregonstate.edu>
+//
+// Title: MainActivityFragment.java
+//
+// Description: Fragment to display our
+// main screen consisting of three
+// buttons and the logo
+// ---------------------------------------
+// Acknowledgements:
+// https://www.udacity.com/course/developing-android-apps--ud853?utm_medium=referral&utm_campaign=api
+
 package com.example.eric.reuserepair.app;
 
 import android.content.Intent;
@@ -34,7 +54,7 @@ import java.util.List;
  */
 
 /*
-Code borrowed from Google's Udacity course: https://www.udacity.com/course/developing-android-apps--ud853?utm_medium=referral&utm_campaign=api
+Code based on Google's Udacity course: https://www.udacity.com/course/developing-android-apps--ud853?utm_medium=referral&utm_campaign=api
  */
 public class MainActivityFragment extends Fragment {
 

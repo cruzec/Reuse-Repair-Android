@@ -1,3 +1,22 @@
+// CS419 - Reuse & Repair Mobile App
+// ---------------------------------------
+// Charles Jenkins
+// <jenkinch@oregonstate.edu>
+//
+// Billy Kerns
+// <kernsbi@oregonstate.edu>
+//
+// Eric Cruz
+// <cruze@oregonstate.edu>
+//
+// Title: GetMapsImage.java
+//
+// Description: Get a map image of
+// where the business is
+// ---------------------------------------
+// Acknowledgements:
+// http://stackoverflow.com/questions/12088136/android-load-image-from-web-url
+
 package com.example.eric.reuserepair.app;
 
 import android.graphics.Bitmap;
@@ -13,13 +32,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-/*
-Code borrowed from: http://stackoverflow.com/questions/12088136/android-load-image-from-web-url
-*/
-
-/**
- * Created by Eric on 3/7/2016.
- */
 public class GetMapsImage extends AsyncTask<String, Void, Bitmap> {
 
     @Override

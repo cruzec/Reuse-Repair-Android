@@ -1,8 +1,22 @@
-package com.example.eric.reuserepair.app;
+// CS419 - Reuse & Repair Mobile App
+// ---------------------------------------
+// Charles Jenkins
+// <jenkinch@oregonstate.edu>
+//
+// Billy Kerns
+// <kernsbi@oregonstate.edu>
+//
+// Eric Cruz
+// <cruze@oregonstate.edu>
+//
+// Title: Place.java
+//
+// Description: custom class for being able
+// to store the business name and distance
+// in an object array
+// ---------------------------------------
 
-/**
- * Created by Eric on 3/14/2016.
- */
+package com.example.eric.reuserepair.app;
 
 public class Place {
 

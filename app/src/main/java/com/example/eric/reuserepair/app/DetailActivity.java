@@ -1,3 +1,20 @@
+// CS419 - Reuse & Repair Mobile App
+// ---------------------------------------
+// Charles Jenkins
+// <jenkinch@oregonstate.edu>
+//
+// Billy Kerns
+// <kernsbi@oregonstate.edu>
+//
+// Eric Cruz
+// <cruze@oregonstate.edu>
+//
+// Title: DetailActivity.java
+//
+// Description: Activity to display info about
+// the business selected
+// ---------------------------------------
+
 package com.example.eric.reuserepair.app;
 
 import android.content.Context;
@@ -100,7 +117,8 @@ public class DetailActivity extends AppCompatActivity {
             String hours = null;
 
             Log.v(LOG_TAG, "Business string: " + selectedBusiness);
-
+            //get all of the JSON data about the business table from the previous activity
+            //and store it in a JSONArray
             try {
                 JSONObject allBusinessesString = new JSONObject(getActivity().getIntent().getExtras().getString("allBusiness"));
                 Log.v(LOG_TAG, "All business string: " + allBusinessesString);
@@ -109,7 +127,8 @@ public class DetailActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+            //Go through the business data looking for the selected business
+            //When found add data to TextViews
             for (int i = 0; i < businessRecords.length(); i++) {
                 try {
                     lookingForBID = businessRecords.getJSONArray(i);

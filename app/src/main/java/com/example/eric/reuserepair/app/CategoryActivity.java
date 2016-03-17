@@ -1,3 +1,22 @@
+// CS419 - Reuse & Repair Mobile App
+// ---------------------------------------
+// Charles Jenkins
+// <jenkinch@oregonstate.edu>
+//
+// Billy Kerns
+// <kernsbi@oregonstate.edu>
+//
+// Eric Cruz
+// <cruze@oregonstate.edu>
+//
+// Title: CategoryActivity.java
+//
+// Description: Activity to display a list of categories from
+// our database that the user can choose.
+// ---------------------------------------//
+// Acknowledgements:
+// http://developer.android.com/training/basics/network-ops/connecting.html
+
 package com.example.eric.reuserepair.app;
 
 import android.content.Context;
@@ -65,12 +84,7 @@ public class CategoryActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -79,7 +93,7 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     /**
-     * A placeholder fragment containing a simple view.
+     * A fragment to display the categories a user can select.
      */
     public static class CategoryFragment extends Fragment {
 
